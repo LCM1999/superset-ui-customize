@@ -16,8 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { t, validateNonEmpty } from '@superset-ui/core';
-import { ControlPanelConfig, sections, sharedControls } from '@superset-ui/chart-controls';
+import { t, validateInteger } from '@superset-ui/core';
+import { ControlPanelConfig, formatSelectOptions } from '@superset-ui/chart-controls';
+
+const NUMBER_LIMITS = [1, 5, 25, 125, 625, 'just for fun'];
 
 const config: ControlPanelConfig = {
   /**
@@ -97,56 +99,57 @@ const config: ControlPanelConfig = {
   // For control input types, see: superset-frontend/src/explore/components/controls/index.js
   controlPanelSections: [
     // Time dropdown select component
-    sections.legacyRegularTime,
-    // 'Query' section
+    //sections.legacyRegularTime,
+    // 'Query' tab
     {
-      label: t('Query'),
+      label: t('Data Filter'),
       expanded: true,
       controlSetRows: [
-        /**
         [
           {
-            name: 'cols',
+            name: 'nodes_label_choose',
             config: {
-              ...sharedControls.groupby,
-              label: t('Columns'),
-              description: t('Columns to group by'),
+              type: 'AdhocFilterControl',
+              label: t('nodes_label_choose'),
+              default: null,
+              description: 'Choose Nodes by Label',
+              mapStateToProps: ({ datasource }) => ({
+                columns: datasource?.columns.filter(c => c.filterable) || [],
+              }),
             },
           },
         ],
-         */
         [
           {
-            name: 'metrics',
+            name: 'links_label_choose',
             config: {
-              ...sharedControls.metrics,
-              // it's possible to add validators to controls if
-              // certain selections/types need to be enforced
-              validators: [validateNonEmpty],
+              type: 'AdhocFilterControl',
+              label: t('links_label_choose'),
+              default: null,
+              description: 'Choose Links by Label',
+              mapStateToProps: ({ datasource }) => ({
+                columns: datasource?.columns.filter(c => c.filterable) || [],
+              }),
             },
           },
         ],
-
+        //['adhoc_filters'],
         [
           {
-            name: 'node_or_link',
+            name: 'number_limit',
             config: {
-              ...sharedControls.metrics,
-              multi: false,
-              label: t('node_or_link'),
-              description: t('Query Nodes or Links'),
+              type: 'SelectControl',
+              freeForm: true,
+              label: t('number_limit'),
+              validators: [validateInteger],
+              choices: formatSelectOptions(NUMBER_LIMITS),
+              description: t('Choose limit number for Nodes or Links which you query.'),
             },
-          },
-        ],
-        ['adhoc_filters'],
-        [
-          {
-            name: 'row_limit',
-            config: sharedControls.row_limit,
           },
         ],
       ],
     },
+    //Custom Tab
     {
       label: t('Hello Controls!'),
       expanded: true,
@@ -201,6 +204,7 @@ const config: ControlPanelConfig = {
       ],
     },
   ],
+  controlOverrides: {},
 };
 
 export default config;
