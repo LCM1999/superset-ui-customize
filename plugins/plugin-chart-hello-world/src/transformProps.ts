@@ -16,18 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { HelloWorldChartPlugin } from '../src';
+import { ChartProps } from '@superset-ui/core';
 
-/**
- * The example tests in this file act as a starting point, and
- * we encourage you to build more. These tests check that the
- * plugin loads properly, and focus on `transformProps`
- * to ake sure that data, controls, and props are all
- * treated correctly (e.g. formData from plugin controls
- * properly transform the data and/or any resulting props).
- */
-describe('@superset-ui/plugin-chart-hello-world', () => {
-  it('exists', () => {
-    expect(HelloWorldChartPlugin).toBeDefined();
-  });
-});
+export default function transformProps(chartProps: ChartProps) {
+  const { width, height, formData, queriesData } = chartProps;
+  const data = queriesData[0].data;
+
+  //console.log('queriesData via TransformProps.ts', queriesData)
+  //console.log('formData via TransformProps.ts', formData);
+
+  return {
+    width,
+    height,
+    data,
+    // and now your control data, manipulated as needed, and passed through as props!
+    formData,
+    nodes: data.nodes,
+    links: data.links,
+  };
+}

@@ -20,7 +20,13 @@ import { t, ChartMetadata, ChartPlugin } from '@superset-ui/core';
 import buildQuery from './buildQuery';
 import controlPanel from './controlPanel';
 import transformProps from './transformProps';
-import thumbnail from '../images/thumbnail.png';
+import thumbnail from './images/thumbnail.png';
+
+const metadata = new ChartMetadata({
+  description: 'Hello World',
+  name: t('NetGraph'),
+  thumbnail,
+});
 
 export default class HelloWorldChartPlugin extends ChartPlugin {
   /**
@@ -34,16 +40,10 @@ export default class HelloWorldChartPlugin extends ChartPlugin {
    * (pivoting, rolling aggregations, sorting etc) or submitting multiple queries.
    */
   constructor() {
-    const metadata = new ChartMetadata({
-      description: 'Hello World',
-      name: t('Hello World'),
-      thumbnail,
-    });
-
     super({
       buildQuery,
       controlPanel,
-      loadChart: () => import('../HelloWorld'),
+      loadChart: () => import('./ReactNetGraph.js'),
       metadata,
       transformProps,
     });
