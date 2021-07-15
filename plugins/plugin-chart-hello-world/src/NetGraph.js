@@ -43,8 +43,7 @@ function NetGraph_1(element, props) {
   //console.log(fd.headerText)
   //选择要渲染的dom
   const div = d3.select(element);
-  const html =
-    '<div id=netgraph_IDEAS style="height:' + height + 'px; width:' + width + 'px;"></div>';
+  const html = '<div id=netgraph161 style="height:' + height + 'px; width:' + width + 'px;"></div>';
   div.html(html);
 
   //const button = fd.buttonChoose;//前端的x_y的字段形势到这里会变成xY这种
@@ -57,11 +56,11 @@ function NetGraph_1(element, props) {
       containerWidth: width,
       containerHeight: height,
       zoom: 0,
-      container: 'netgraph_IDEAS', //要添加到的dom
+      container: 'netgraph161', //要添加到的dom
       maxZoom: 4,
       minZoom: -4,
     },
-    layout: 'square',
+    layout: 'star',
     data: data_true,
     style: [
       {
@@ -100,6 +99,8 @@ function NetGraph_1(element, props) {
       },
     ],
   });
+
+  console.log(document.getElementById('deckgl-overlay'));
 
   console.log('这是一条测试2');
 
